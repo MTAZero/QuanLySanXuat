@@ -32,12 +32,16 @@ router.get('/', function (req, res) {
 });
 
 router.get('/:id', function(req, res){
-    Class.findById(req.params.id, function(err, cls){
+    Class.find({"_id":req.params.id}, function(err, cls){
         if (err) return res.status(500).send("Error to find class");
         if (!cls) return res.status(404).send("No class found.");
-        cls.students = [];
-        console.log(cls);
-        res.status(200).send(cls);
+        
+        
+        Student.find({"class": req.params.id}, function(err, student){
+            var ans = {...cls, student};
+            console.log(ans);
+            res.status(200).send(ans);
+        });
     });
 });
 
