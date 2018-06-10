@@ -4,8 +4,10 @@ var db = require('./db');
 
 global.__root   = __dirname + '/'; 
 
-var UserController = require('./user/UserController');
+var UserController = require('./entity/user/UserController');
+var AuthController = require('./auth/AuthController');
 
 app.use('/users', UserController);
+app.use('/auth', AuthController);
 
 module.exports = app;
