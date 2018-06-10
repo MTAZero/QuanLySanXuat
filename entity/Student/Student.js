@@ -1,8 +1,11 @@
 var mongoose = require('mongoose');  
-var ClassSchema = new mongoose.Schema({  
-  name: String,
-  type: String
-});
-mongoose.model('Class', ClassSchema);
+var Schema = mongoose.Schema;
 
-module.exports = mongoose.model('Class');
+var Student = new mongoose.Schema({  
+    name: String,
+    dob: Date,
+    class: {type: Schema.Types.ObjectId, ref: 'Class'}
+});
+mongoose.model('student', Student);
+
+module.exports = mongoose.model('student');
