@@ -15,7 +15,6 @@ router.use(bodyParser.urlencoded({
 router.use(bodyParser.json());
 var User = require('./User');
 
-
 // // CREATES A NEW USER
 router.post('/', VerifyToken, function (req, res) {
     User.findById(req.userId, {
@@ -110,7 +109,7 @@ router.put('/:id', VerifyToken, function (req, res, next) {
         if (err) return res.status(500).send("Token not correct");
         if (!user) return res.status(404).send("Token not correct");
 
-        if (user.type != 1 && req.userId != req.params.id)
+        if (user.type != 1)
             return res.status(500).send("You not have permision");
 
         User.findByIdAndUpdate(req.params.id, {

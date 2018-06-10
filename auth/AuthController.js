@@ -90,9 +90,6 @@ router.post('/register', function (req, res) {
 });
 
 router.get('/me', VerifyToken, function (req, res, next) {
-
-  console.log("name : ", req.body.name);
-
   User.findById(req.userId, {
     password: 0
   }, function (err, user) {
