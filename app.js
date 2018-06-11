@@ -22,4 +22,7 @@ app.use("/product_material", ProductMaterialController);
 var EnterCouponController = require("./entity/enter_coupon/enter_couponController");
 app.use("/enter_coupon", EnterCouponController);
 
+var  EnterCouponDetailController = require("./entity/enter_coupon_detail/enter_coupon_detailController");
+app.use("/enter_coupon_detail", EnterCouponDetailController);
+
 module.exports = app;

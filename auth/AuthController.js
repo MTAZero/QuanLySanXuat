@@ -113,7 +113,7 @@ router.post("/changepassword", VerifyToken, function (req, res) {
       password: md5(req.body.newpassword)
     }).exec(function (err, user2) {
       if (err) return res.status(500).send(err);
-      return res.status(200).send("Successful change password "+ user2);
+      return res.status(200).send("Successful change password ");
     })
   });
 });
