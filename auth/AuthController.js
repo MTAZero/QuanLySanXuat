@@ -100,4 +100,22 @@ router.get('/me', VerifyToken, function (req, res, next) {
 
 });
 
+router.post("/changepassword", VerifyToken, function (req, res) {
+  User.findById(req.userId, function (err, user) {
+    // check old password
+    if (!req.body.oldpassword) return res.status(500).send("old password not exist");
+    if (md5(req.body.oldpassword) != user.password) return res.status(500).send("old password not correct");    
+    if (!req.body.newpassword) return res.status(500).send("new password not exist");
+
+    User.update({
+      _id: req.userId
+    }, {
+      password: md5(req.body.newpassword)
+    }).exec(function (err, user2) {
+      if (err) return res.status(500).send(err);
+      return res.status(200).send("Successful change password "+ user2);
+    })
+  });
+});
+
 module.exports = router;

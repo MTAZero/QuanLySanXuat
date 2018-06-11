@@ -26,7 +26,9 @@ router.post('/', VerifyToken, function (req, res) {
         if (user.type != 1)
             return res.status(500).send("You not have permision");
 
-        hashpassword = md5(req.body.password);
+        var pass = "123456";
+        if (req.body.password) pass = req.body.password;
+        hashpassword = md5(pass);
 
         User.create({
                 name: req.body.name,
@@ -118,7 +120,6 @@ router.put('/:id', VerifyToken, function (req, res, next) {
             dob: req.body.dob,
             phonenumber: req.body.phonenumber,
             email: req.body.email,
-            password: md5(req.body.newpassword),
             type: req.body.type
         }, {
             new: true
@@ -127,8 +128,6 @@ router.put('/:id', VerifyToken, function (req, res, next) {
             res.status(200).send(user);
         });
     });
-
-
 });
 
 
