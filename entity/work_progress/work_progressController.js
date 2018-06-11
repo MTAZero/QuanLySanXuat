@@ -46,7 +46,7 @@ router.get('/', VerifyToken, function (req, res) {
         if (user.type == 3) return res.status(500).send("You not have permision");
 
         Entity.find({})
-            .populate("employee")
+            //.populate("employee")
             .exec(function (err, work_progress) {
                 if (err) return res.status(500).send("There was a problem finding the work_progress.");
                 res.status(200).send(work_progress);
@@ -67,7 +67,7 @@ router.get('/:id', VerifyToken, function (req, res, next) {
             return res.status(500).send("You not have permision");
 
         Entity.findById(req.params.id)
-            .populate('employee')
+            //.populate('employee')
             .exec(function (err, work_progress) {
                 if (err) return res.status(500).send("There was a problem finding the work_progress.");
                 if (!user) return res.status(404).send("No work_progress found.");
@@ -90,7 +90,7 @@ router.get('/ListWorkProgress/:id', VerifyToken, function (req, res, next) {
         Entity.find({
                 order: req.params.id
             })
-            .populate('employee')
+            //.populate('employee')
             .exec(function (err, work_progress) {
                 if (err) return res.status(500).send("There was a problem finding the work_progress.");
                 if (!user) return res.status(404).send("No work_progress found.");

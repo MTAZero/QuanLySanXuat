@@ -66,7 +66,9 @@ router.get('/', VerifyToken, function (req, res) {
 
         if (user.type != 1) return res.status(500).send("You not have permision");
 
-        Entity.find({}).populate('product').populate('order').exec(function (err, order_detail) {
+        Entity.find({})
+        //.populate('product').populate('order')
+        .exec(function (err, order_detail) {
             if (err) return res.status(500).send("There was a problem finding the order_detail. Error : " + err);
             if (!order_detail) return res.status(404).send("Can't find enter order detail");
             res.status(200).send(order_detail);
@@ -86,7 +88,9 @@ router.get('/:id', VerifyToken, function (req, res, next) {
         if (user.type > 3)
             return res.status(500).send("You not have permision");
 
-        Entity.findById(req.params.id).populate('order').populate("product").exec(function (err, order_detail) {
+        Entity.findById(req.params.id)
+        //.populate('order').populate("product")
+        .exec(function (err, order_detail) {
             if (err) return res.status(500).send("There was a problem finding the order_detail.");
             if (!order_detail) return res.status(404).send("No order_detail found.");
             res.status(200).send(order_detail);
@@ -107,7 +111,9 @@ router.get('/ListOrderDetail/:id', VerifyToken, function (req, res, next) {
 
         Entity.find({
             order: req.params.id
-        }).populate('order').populate('product').exec(function (err, order_detail) {
+        })
+        //.populate('order').populate('product')
+        .exec(function (err, order_detail) {
             if (err) return res.status(500).send("There was a problem finding the order_detail. Error : " + err);
             if (!order_detail) return res.status(404).send("No order_detail found.");
             res.status(200).send(order_detail);

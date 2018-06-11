@@ -73,7 +73,10 @@ router.get('/', VerifyToken, function (req, res) {
 
         if (user.type > 2) return res.status(500).send("You not have permision");
 
-        Entity.find({}).populate('material').populate('enter_coupon').exec(function (err, enter_coupon_detail) {
+        Entity.find({})
+        //.populate('material')
+        //.populate('enter_coupon')
+        .exec(function (err, enter_coupon_detail) {
             if (err) return res.status(500).send("There was a problem finding the enter_coupon_detail. Error : " + err);
             if (!enter_coupon_detail) return res.status(404).send("Can't find enter coupon detail");
             res.status(200).send(enter_coupon_detail);
@@ -93,7 +96,10 @@ router.get('/:id', VerifyToken, function (req, res, next) {
         if (user.type > 2)
             return res.status(500).send("You not have permision");
 
-        Entity.findById(req.params.id).populate('enter_coupon').populate("material").exec(function (err, enter_coupon_detail) {
+        Entity.findById(req.params.id)
+        //.populate('enter_coupon')
+        //.populate("material")
+        .exec(function (err, enter_coupon_detail) {
             if (err) return res.status(500).send("There was a problem finding the enter_coupon_detail.");
             if (!enter_coupon_detail) return res.status(404).send("No enter_coupon_detail found.");
             res.status(200).send(enter_coupon_detail);
@@ -114,7 +120,9 @@ router.get('/listEnterCouponDetail/:id', VerifyToken, function (req, res, next) 
 
         Entity.find({
             enter_coupon: req.params.id
-        }).populate('enter_coupon').populate('material').exec(function (err, enter_coupon_detail) {
+        })
+        //.populate('enter_coupon').populate('material')
+        .exec(function (err, enter_coupon_detail) {
             if (err) return res.status(500).send("There was a problem finding the enter_coupon_detail. Error : " + err);
             if (!enter_coupon_detail) return res.status(404).send("No enter_coupon_detail found.");
             res.status(200).send(enter_coupon_detail);

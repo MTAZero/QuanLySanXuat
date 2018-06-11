@@ -44,7 +44,7 @@ router.get('/', VerifyToken, function (req, res) {
         if (user.type != 1) return res.status(500).send("You not have permision");
 
         Entity.find({})
-        .populate("customer")
+        //.populate("customer")
         .exec(function (err, order) {
             if (err) return res.status(500).send("There was a problem finding the order.");
             res.status(200).send(order);
@@ -65,7 +65,7 @@ router.get('/:id', VerifyToken, function (req, res, next) {
             return res.status(500).send("You not have permision");
 
         Entity.findById(req.params.id)
-        .populate('customer')
+        //.populate('customer')
         .exec(function (err, order) {
             if (err) return res.status(500).send("There was a problem finding the order.");
             if (!user) return res.status(404).send("No order found.");
@@ -86,7 +86,7 @@ router.get('/listEnterCoupon/:id', VerifyToken, function (req, res, next) {
             return res.status(500).send("You not have permision");
 
         Entity.find({customer: req.params.id})
-        .populate('customer')
+        //.populate('customer')
         .exec(function (err, order) {
             if (err) return res.status(500).send("There was a problem finding the order.");
             if (!user) return res.status(404).send("No order found.");

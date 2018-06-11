@@ -44,7 +44,9 @@ router.get('/', VerifyToken, function (req, res) {
 
         if (user.type != 1) return res.status(500).send("You not have permision");
 
-        Entity.find({}).populate("product").populate("material").exec(function (err, product_material) {
+        Entity.find({})
+        //.populate("product").populate("material")
+        .exec(function (err, product_material) {
             if (err) return res.status(500).send("There was a problem finding the product_material.");
             res.status(200).send(product_material);
         });
@@ -63,7 +65,9 @@ router.get('/:id', VerifyToken, function (req, res, next) {
         if (user.type != 1 && req.userId != req.params.id)
             return res.status(500).send("You not have permision");
 
-        Entity.findById(req.params.id).populate('product').populate('material').exec(function (err, product_material) {
+        Entity.findById(req.params.id)
+        //.populate('product').populate('material')
+        .exec(function (err, product_material) {
             if (err) return res.status(500).send("There was a problem finding the product_material.");
             if (!user) return res.status(404).send("No product_material found.");
             res.status(200).send(product_material);
@@ -82,7 +86,9 @@ router.get('/listmaterial/:id', VerifyToken, function (req, res, next) {
         if (user.type != 1 && req.userId != req.params.id)
             return res.status(500).send("You not have permision");
 
-        Entity.find({product: req.params.id}).populate('product').populate('material').exec(function (err, product_material) {
+        Entity.find({product: req.params.id})
+        //.populate('product').populate('material')
+        .exec(function (err, product_material) {
             if (err) return res.status(500).send("There was a problem finding the product_material.");
             if (!user) return res.status(404).send("No product_material found.");
             res.status(200).send(product_material);
