@@ -28,6 +28,9 @@ app.use("/enter_coupon_detail", EnterCouponDetailController);
 var OrderController = require("./entity/order/orderController");
 app.use("/order", OrderController);
 
+var OrderDetailController = require("./entity/order_detail/order_detailController");
+app.use("/order_detail", OrderDetailController);
+
 var WorkProgressController = require("./entity/work_progress/work_progressController");
 app.use("/work_progress", WorkProgressController);
 
