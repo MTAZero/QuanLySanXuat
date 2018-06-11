@@ -6,8 +6,10 @@ global.__root   = __dirname + '/';
 
 var UserController = require('./entity/user/UserController');
 var AuthController = require('./auth/AuthController');
+var MaterialController = require('./entity/material/materialController');
 
 app.use('/users', UserController);
 app.use('/auth', AuthController);
+app.use('/material', MaterialController);
 
 module.exports = app;
