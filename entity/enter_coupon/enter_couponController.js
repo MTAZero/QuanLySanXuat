@@ -44,7 +44,9 @@ router.get('/', VerifyToken, function (req, res) {
 
         if (user.type != 1) return res.status(500).send("You not have permision");
 
-        Entity.find({}).populate("user").exec(function (err, enter_coupon) {
+        Entity.find({})
+        //.populate("user")
+        .exec(function (err, enter_coupon) {
             if (err) return res.status(500).send("There was a problem finding the enter_coupon.");
             res.status(200).send(enter_coupon);
         });
