@@ -19,4 +19,7 @@ app.use("/product",ProductController);
 var ProductMaterialController = require('./entity/product_masterial/product_materialController');
 app.use("/product_material", ProductMaterialController);
 
+var EnterCouponController = require("./entity/enter_coupon/enter_couponController");
+app.use("/enter_coupon", EnterCouponController);
+
 module.exports = app;
