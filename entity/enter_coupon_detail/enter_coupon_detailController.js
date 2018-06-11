@@ -11,6 +11,7 @@ router.use(bodyParser.json());
 var Entity = require('./enter_coupon_detail');
 var User = require("../user/User");
 var Coupon = require("../enter_coupon/enter_coupon");
+var Material = require("../material/material");
 
 // // CREATES A NEW product
 router.post('/', VerifyToken, function (req, res) {
@@ -33,14 +34,28 @@ router.post('/', VerifyToken, function (req, res) {
             function (err, enter_coupon_detail) {
                 if (err) return res.status(500).send("There was a problem adding the information to the database. Error : " + err);
 
-                Coupon.findById(enter_coupon_detail.enter_coupon, function(err, enter_coupon){
-                    if (err) return res.status(500).send("There was a problem adding the information to the database. Error : " + err);
-                    if (!enter_coupon) return res.status(500).send("Can't find enter coupon");
-                    console.log(enter_coupon);
-                    enter_coupon.total = enter_coupon.total + enter_coupon_detail.totalMoney;
-                    Coupon.update(enter_coupon, function(err, enter_coupon2){
-                        if (err) return res.status(500).send("There was a problem adding the information to the database. Error : " + err);
-                        res.status(200).send(enter_coupon_detail);    
+                Material.findById(enter_coupon_detail.material, function (err, material) {
+                    if (err || !material) res.status(500).send("Can't find Material");
+                    console.log(material);
+                    material.quantity = material.quantity + enter_coupon_detail.quantity;
+
+                    Material.findByIdAndUpdate(enter_coupon_detail.material, material, function (err, material2) {
+                        if (err || !material2) {
+                            res.status(500).send("Can't update material. Error : " + err);
+                            return;
+                        }
+
+                        Coupon.findById(enter_coupon_detail.enter_coupon, function (err, enter_coupon) {
+                            if (err) return res.status(500).send("There was a problem adding the information to the database. Error : " + err);
+                            if (!enter_coupon) return res.status(500).send("Can't find enter coupon");
+
+                            enter_coupon.total = enter_coupon.total + enter_coupon_detail.totalMoney;
+
+                            Coupon.findByIdAndUpdate(enter_coupon_detail.enter_coupon, enter_coupon, function (err, enter_coupon2) {
+                                if (err) return res.status(500).send("There was a problem adding the information to the database. Error : " + err);
+                                res.status(200).send(enter_coupon_detail);
+                            });
+                        });
                     });
                 });
 
@@ -59,7 +74,7 @@ router.get('/', VerifyToken, function (req, res) {
         if (user.type > 2) return res.status(500).send("You not have permision");
 
         Entity.find({}).populate('material').populate('enter_coupon').exec(function (err, enter_coupon_detail) {
-            if (err) return res.status(500).send("There was a problem finding the enter_coupon_detail. Error : "+err);
+            if (err) return res.status(500).send("There was a problem finding the enter_coupon_detail. Error : " + err);
             if (!enter_coupon_detail) return res.status(404).send("Can't find enter coupon detail");
             res.status(200).send(enter_coupon_detail);
         });
@@ -100,7 +115,7 @@ router.get('/listEnterCouponDetail/:id', VerifyToken, function (req, res, next) 
         Entity.find({
             enter_coupon: req.params.id
         }).populate('enter_coupon').populate('material').exec(function (err, enter_coupon_detail) {
-            if (err) return res.status(500).send("There was a problem finding the enter_coupon_detail. Error : "+err);
+            if (err) return res.status(500).send("There was a problem finding the enter_coupon_detail. Error : " + err);
             if (!enter_coupon_detail) return res.status(404).send("No enter_coupon_detail found.");
             res.status(200).send(enter_coupon_detail);
         });
@@ -119,23 +134,32 @@ router.delete('/:id', VerifyToken, function (req, res, next) {
             return res.status(500).send("You not have permision");
 
         Entity.findById(req.params.id, function (err, enter_coupon_detail) {
-            if (err) return res.status(500).send("There was a problem deleting the enter_coupon_detail.");
+            if (err) return res.status(500).send("There was a problem deleting the enter_coupon_detail. Error : "+err);
 
-            Coupon.findById(enter_coupon_detail.enter_coupon, function(err, enter_coupon){
-                if (err || !enter_coupon) return res.status(500).send("There was a problems deleting the enter coupon.");
-                
-                enter_coupon.total = enter_coupon.total - enter_coupon_detail.totalMoney;
-                Coupon.update(enter_coupon, function(err, enter_coupon){
-                    if (err || !enter_coupon) return res.status(500).send("There was a problems deleting the enter coupon.");
-                    
-                    Entity.deleteOne(enter_coupon_detail, function(err, enter_coupon_detail2){
-                        if (err || !enter_coupon_detail2) res.status(500).send("There was a problems deleting the enter coupon detail");
-                        res.status(200).send("enter_coupon_detail was deleted.");
+            Material.findById(enter_coupon_detail.material, function (err, material) {
+                if (err || !material) res.status(500).send("Can't find Material");
+                material.quantity = material.quantity - enter_coupon_detail.quantity;
+
+                Material.findByIdAndUpdate(enter_coupon_detail.material, material, function (err, material2) {
+                    if (err || !material) res.status(500).send("Can't update material. Error "+err);
+
+                    Coupon.findById(enter_coupon_detail.enter_coupon, function (err, enter_coupon) {
+                        if (err || !enter_coupon) return res.status(500).send("There was a problems deleting the enter coupon. Error: "+err);
+
+                        enter_coupon.total = enter_coupon.total - enter_coupon_detail.totalMoney;
+                        Coupon.findByIdAndUpdate(enter_coupon_detail.enter_coupon, enter_coupon, function (err, enter_coupon2) {
+                            if (err || !enter_coupon2) return res.status(500).send("There was a problems deleting the enter coupon. Error: "+err);
+
+                            Entity.deleteOne(enter_coupon_detail, function (err, enter_coupon_detail2) {
+                                if (err || !enter_coupon_detail2) res.status(500).send("There was a problems deleting the enter coupon detail");
+                                res.status(200).send("enter_coupon_detail was deleted.");
+                            });
+                        });
+
                     });
                 });
             });
-            
-            
+
         });
     });
 });
