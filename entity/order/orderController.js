@@ -19,9 +19,6 @@ router.post('/', VerifyToken, function (req, res) {
         if (err) return res.status(500).send("Token not correct");
         if (!user) return res.status(404).send("Token not correct");
 
-        if (user.type != 3)
-            return res.status(500).send("You not have permision");
-
         Entity.create({
                 date: req.body.date,
                 customer: req.userId,
