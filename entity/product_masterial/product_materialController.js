@@ -23,8 +23,8 @@ router.post('/', VerifyToken, function (req, res) {
             return res.status(500).send("You not have permision");
 
         Entity.create({
-                product: req.body.productId,
-                material: req.body.materialId,
+                product: req.body.product,
+                material: req.body.material,
                 quantity: req.body.quantity
             },
             function (err, product_material) {
@@ -122,8 +122,8 @@ router.put('/:id', VerifyToken, function (req, res, next) {
             return res.status(500).send("You not have permision");
 
         Entity.findByIdAndUpdate(req.params.id, {
-            product: req.body.productId,
-            material: req.body.materialId,
+            product: req.body.product,
+            material: req.body.material,
             quantity: req.body.quantity
         }, {
             new: true

@@ -25,4 +25,7 @@ app.use("/enter_coupon", EnterCouponController);
 var  EnterCouponDetailController = require("./entity/enter_coupon_detail/enter_coupon_detailController");
 app.use("/enter_coupon_detail", EnterCouponDetailController);
 
+var OrderController = require("./entity/order/orderController");
+app.use("/order", OrderController);
+
 module.exports = app;
